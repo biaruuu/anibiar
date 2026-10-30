@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`dark ${karla.variable}`}>
       <body className="min-h-screen font-sans">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-[1500px] px-4">{children}</main>
+        <main className="mx-auto w-full max-w-[1500px] px-2 sm:px-4">{children}</main>
         <SiteFooter />
       </body>
     </html>

@@ -7,6 +7,7 @@ import type { AiringEntry } from "@/lib/anilist";
 import { cn } from "@/lib/utils";
 
 const DAY = 86_400;
+const ROW = 42; // px - every schedule row is exactly this tall
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -15,8 +16,11 @@ const startOfDay = (d: Date) => {
   x.setHours(0, 0, 0, 0);
   return x;
 };
-
 const pad = (n: number) => String(n).padStart(2, "0");
+const hhmm = (sec: number) => {
+  const t = new Date(sec * 1000);
+  return `${pad(t.getHours())}:${pad(t.getMinutes())}`;
+};
 
 export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number }) {
   // Dates are computed on the client so they always use the viewer's timezone.
@@ -29,12 +33,13 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
 
   useEffect(() => {
     const today = startOfDay(new Date());
-    const list = Array.from({ length: 15 }, (_, i) => {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i - 7);
-      return d;
-    });
-    setDays(list);
+    setDays(
+      Array.from({ length: 15 }, (_, i) => {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i - 7);
+        return d;
+      }),
+    );
     setSelected(7);
   }, []);
 
@@ -65,11 +70,10 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
     return () => ctrl.abort();
   }, [day]);
 
-  const rowsRef = useRef<HTMLDivElement>(null);
-  // Center the chosen day by scrolling ONLY the day strip. (scrollIntoView would
-  // also scroll the whole page down to the schedule when the site first loads.)
+  // Center the chosen day by scrolling ONLY the day strip (never the page).
+  const stripRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const c = rowsRef.current;
+    const c = stripRef.current;
     const el = c?.children[selected] as HTMLElement | undefined;
     if (!c || !el) return;
     c.scrollTo({ left: el.offsetLeft - c.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
@@ -80,38 +84,38 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
     () => (entries ? (all ? entries : entries.slice(0, initialLimit)) : []),
     [entries, all, initialLimit],
   );
+  const airedRows = visible.filter((e) => e.airingAt <= nowSec).length;
 
   return (
     <section>
-      <p className="text-base text-muted-foreground sm:text-xl">Estimated</p>
-      <h2 className="text-2xl font-extrabold tracking-tight sm:text-4xl">Airing Schedule</h2>
+      <p className="text-[15px] leading-none text-[#74747c] md:text-xl">Estimated</p>
+      <h2 className="mt-[6px] text-[24px] font-extrabold leading-none tracking-tight md:text-4xl">
+        Airing Schedule
+      </h2>
 
       <div
-        ref={rowsRef}
-        className="no-scrollbar edge-fade-x relative mt-4 flex items-end overflow-x-auto py-2 sm:mt-6 sm:gap-1 sm:py-3"
+        ref={stripRef}
+        className="no-scrollbar edge-fade-x relative -mx-2 mt-[18px] flex items-end overflow-x-auto px-2 py-2 sm:mx-0 sm:px-0"
       >
         {days.map((d, i) => {
           const active = i === selected;
           return (
             <div key={d.toISOString()} className="flex shrink-0 items-end">
-              <span className="px-2 text-2xl font-extrabold text-white/20 sm:px-3 sm:text-3xl">/</span>
+              <span className="px-[19px] pb-[2px] text-[34px] font-extrabold leading-none text-white/25 md:px-6 md:text-5xl">
+                /
+              </span>
               <button
                 onClick={() => setSelected(i)}
                 className={cn(
-                  "flex flex-col items-center leading-none transition-all duration-300",
-                  active ? "text-foreground" : "text-white/35 hover:text-white/60",
+                  "flex flex-col items-center font-extrabold leading-none tracking-tight transition-all duration-300",
+                  active ? "text-white" : "text-white/35 hover:text-white/60",
                 )}
               >
-                <span
-                  className={cn(
-                    "font-extrabold",
-                    active ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl",
-                  )}
-                >
+                <span className={active ? "text-[40px] md:text-6xl" : "text-[34px] md:text-5xl"}>
                   {DAYS[d.getDay()]}
                 </span>
                 {active && (
-                  <span className="mt-1 text-base text-muted-foreground sm:text-xl">
+                  <span className="mt-[2px] text-[15px] font-normal text-[#74747c] md:text-xl">
                     {MONTHS[d.getMonth()]} {d.getDate()}
                   </span>
                 )}
@@ -119,46 +123,49 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
             </div>
           );
         })}
-        <span className="px-3 text-3xl font-extrabold text-white/20">/</span>
+        <span className="px-[19px] pb-[2px] text-[34px] font-extrabold leading-none text-white/25 md:px-6 md:text-5xl">
+          /
+        </span>
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-[1.75rem] border border-border bg-card/40">
+      <div className="relative mt-3 overflow-hidden rounded-[20px] border border-[#2a2a2e] bg-[#0e0e0f]">
         {error ? (
           <p className="p-8 text-center text-muted-foreground">Couldn&apos;t load the schedule.</p>
         ) : !entries ? (
-          <div className="space-y-px">
+          <div>
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-[52px] rounded-none" />
+              <Skeleton key={i} className="h-[42px] rounded-none" />
             ))}
           </div>
         ) : entries.length === 0 ? (
-          <p className="p-8 text-center text-muted-foreground">Nothing scheduled for this day.</p>
+          <p className="p-8 text-center text-[14px] text-muted-foreground">Nothing scheduled for this day.</p>
         ) : (
           <>
-            <ul className="divide-y divide-border">
+            {/* one continuous bar covering everything that has already aired */}
+            {airedRows > 0 && (
+              <span
+                aria-hidden
+                className="pointer-events-none absolute left-0 top-0 z-10 w-[3px] bg-primary/80"
+                style={{ height: airedRows * ROW }}
+              />
+            )}
+            <ul>
               {visible.map((e, i) => {
-                const t = new Date(e.airingAt * 1000);
-                const time = `${pad(t.getHours())}:${pad(t.getMinutes())}`;
                 const prev = visible[i - 1];
-                const prevTime = prev ? new Date(prev.airingAt * 1000) : null;
-                const sameTime = prevTime && pad(prevTime.getHours()) + pad(prevTime.getMinutes()) === pad(t.getHours()) + pad(t.getMinutes());
-                const aired = e.airingAt <= nowSec;
+                const sameTime = prev && hhmm(prev.airingAt) === hhmm(e.airingAt);
                 return (
-                  <li key={e.id} className={cn(i % 2 === 1 && "bg-white/[0.02]")}>
+                  <li key={e.id} className={cn(i % 2 === 1 && "bg-white/[0.035]")}>
                     <Link
                       href={`/anime/${e.media.id}`}
-                      className={cn(
-                        "relative flex items-center gap-3 px-4 py-3 transition hover:bg-white/5 sm:gap-4 sm:px-5 sm:py-3.5",
-                        aired && "before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-primary/70",
-                      )}
+                      className="flex h-[42px] items-center px-[13px] transition hover:bg-white/5 md:h-12 md:px-5"
                     >
-                      <span className="w-11 shrink-0 text-xs text-muted-foreground sm:w-14 sm:text-base">
-                        {sameTime ? "" : time}
+                      <span className="w-[60px] shrink-0 text-[13px] text-[#74747c] md:w-20 md:text-base">
+                        {sameTime ? "" : hhmm(e.airingAt)}
                       </span>
-                      <span className="min-w-0 flex-1 truncate text-sm sm:text-lg">
+                      <span className="min-w-0 flex-1 truncate pr-2 text-[14px] md:text-lg">
                         {e.media.title.english ?? e.media.title.romaji}
                       </span>
-                      <span className="shrink-0 rounded-full border border-border px-2.5 py-1 text-xs sm:px-3.5 sm:py-1.5 sm:text-base">
+                      <span className="shrink-0 rounded-full border border-white/[0.14] px-[10px] py-[2px] text-[13px] leading-[18px] md:px-3.5 md:text-base">
                         EP {e.episode}
                       </span>
                     </Link>
@@ -169,7 +176,7 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
             {entries.length > initialLimit && (
               <button
                 onClick={() => setAll((v) => !v)}
-                className="w-full border-t border-border py-4 text-lg text-muted-foreground transition hover:bg-white/5 hover:text-foreground"
+                className="h-[42px] w-full border-t border-[#2a2a2e] text-[14px] text-[#74747c] transition hover:bg-white/5 hover:text-foreground md:h-12 md:text-lg"
               >
                 {all ? "Show Less" : "View More"}
               </button>

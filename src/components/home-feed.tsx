@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { AnimeGrid } from "@/components/anime-grid";
+import { AnimeGrid, gridClass } from "@/components/anime-grid";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { ListResult, Media } from "@/lib/anilist";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
   const cache = useRef(new Map<string, ListResult>([["newest:1", initial]]));
   const top = useRef<HTMLDivElement>(null);
   const first = useRef(true);
+  const userNavigated = useRef(false);
 
   useEffect(() => {
     if (first.current) {
@@ -56,28 +57,35 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
     return () => ctrl.abort();
   }, [tab, page, retry]);
 
+  // Only scroll back up after the person actually pressed next/prev - never on load.
+  useEffect(() => {
+    if (!userNavigated.current) return;
+    top.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [page]);
+
   const changeTab = (id: TabId) => {
     if (id === tab) return;
     setTab(id);
     setPage(1);
   };
   const changePage = (p: number) => {
+    userNavigated.current = true;
     setPage(p);
-    top.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <div ref={top} className="scroll-mt-24">
-      <div className="mb-5 flex items-center gap-3">
-        <div className="no-scrollbar flex min-w-0 flex-1 overflow-hidden rounded-2xl border border-border bg-card/60">
+    <div ref={top} className="scroll-mt-[72px]">
+      <div className="mb-[14px] flex items-center gap-[6px] md:mb-5 md:gap-3">
+        {/* tabs */}
+        <div className="no-scrollbar flex h-[34px] min-w-0 flex-1 overflow-x-auto rounded-xl border border-[#2a2a2e] bg-[#0e0e0f] md:h-[52px] md:rounded-2xl">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => changeTab(t.id)}
               className={cn(
-                "h-11 flex-1 whitespace-nowrap px-2 text-sm font-bold transition-colors sm:h-[3.25rem] sm:text-lg",
+                "h-full flex-1 whitespace-nowrap px-2 text-[14px] font-medium transition-colors md:text-lg md:font-bold",
                 tab === t.id
-                  ? "bg-primary/20 text-primary"
+                  ? "bg-primary/[0.17] text-primary"
                   : "text-foreground hover:bg-white/5",
               )}
             >
@@ -85,23 +93,25 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
             </button>
           ))}
         </div>
-        <div className="flex h-11 shrink-0 items-center sm:h-[3.25rem] overflow-hidden rounded-2xl border border-border bg-card/60">
+
+        {/* pagination */}
+        <div className="flex h-[34px] w-[116px] shrink-0 items-center overflow-hidden rounded-xl border border-[#2a2a2e] md:h-[52px] md:w-[150px] md:rounded-2xl">
           <button
             aria-label="Previous page"
             disabled={page <= 1 || loading}
             onClick={() => changePage(page - 1)}
-            className="grid h-full w-9 place-items-center transition sm:w-11 hover:bg-white/5 disabled:opacity-30"
+            className="grid h-full w-[38px] place-items-center text-foreground transition hover:bg-white/5 disabled:text-[#55555b] md:w-12"
           >
-            <ChevronLeft className="size-5" />
+            <ChevronLeft className="size-[18px]" />
           </button>
-          <span className="w-8 text-center text-sm text-muted-foreground sm:w-9 sm:text-lg">{page}</span>
+          <span className="flex-1 text-center text-[14px] text-[#77777f] md:text-lg">{page}</span>
           <button
             aria-label="Next page"
             disabled={!data.hasNextPage || loading}
             onClick={() => changePage(page + 1)}
-            className="grid h-full w-9 place-items-center border-l sm:w-11 border-border transition hover:bg-white/5 disabled:opacity-30"
+            className="grid h-full w-[38px] place-items-center border-l border-[#2a2a2e] text-foreground transition hover:bg-white/5 disabled:text-[#55555b] md:w-12"
           >
-            <ChevronRight className="size-5" />
+            <ChevronRight className="size-[18px]" />
           </button>
         </div>
       </div>
@@ -109,20 +119,17 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
       {error ? (
         <div className="grid place-items-center rounded-3xl border border-border py-16 text-center text-muted-foreground">
           Couldn&apos;t load anime right now.
-          <button
-            className="mt-3 font-bold text-primary"
-            onClick={() => setRetry((n) => n + 1)}
-          >
+          <button className="mt-3 font-bold text-primary" onClick={() => setRetry((n) => n + 1)}>
             Try again
           </button>
         </div>
       ) : loading ? (
-        <div className="grid grid-cols-3 gap-x-2.5 gap-y-4 sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <div className={gridClass}>
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i}>
-              <Skeleton className="aspect-[2/3] rounded-[1.4rem]" />
-              <Skeleton className="mt-3 h-4 w-4/5" />
-              <Skeleton className="mt-2 h-5 w-3/5" />
+              <Skeleton className="aspect-[212/294] rounded-[15px]" />
+              <Skeleton className="mt-[11px] h-4 w-4/5" />
+              <Skeleton className="mt-[11px] h-[18px] w-3/5" />
             </div>
           ))}
         </div>

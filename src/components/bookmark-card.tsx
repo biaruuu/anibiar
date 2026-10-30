@@ -3,16 +3,16 @@ import { LogoMark } from "@/components/logo";
 
 export function BookmarkCard() {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-border bg-card/40 p-3 sm:gap-4 sm:rounded-3xl sm:p-4">
-      <LogoMark className="size-12 shrink-0 rounded-full bg-gradient-to-br from-primary/40 to-primary/10 text-xl sm:size-[4.5rem] sm:text-3xl" />
+    <div className="flex h-[66px] items-center gap-2 rounded-2xl border border-[#2a2a2e] px-[13px] md:h-[84px] md:gap-4 md:px-5">
+      <LogoMark className="size-[37px] shrink-0 rounded-full bg-gradient-to-br from-primary/50 to-primary/10 text-[17px] md:size-[52px] md:text-2xl" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-base font-extrabold leading-tight sm:text-xl">Love the Site?</p>
-        <p className="truncate text-sm leading-tight text-muted-foreground sm:text-lg">
+        <p className="truncate text-[15px] font-extrabold leading-5 md:text-xl">Love the Site?</p>
+        <p className="truncate text-[13px] leading-[18px] text-[#6e6e76] md:text-base">
           Add it to your Bookmarks!
         </p>
       </div>
-      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary/10 text-primary sm:size-14">
-        <Bookmark className="size-5 sm:size-6" />
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary/[0.14] text-primary md:size-10">
+        <Bookmark className="size-4 md:size-5" />
       </span>
     </div>
   );

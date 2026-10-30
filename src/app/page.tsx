@@ -13,6 +13,7 @@ import {
   type ListResult,
   type Media,
 } from "@/lib/anilist";
+import { heroPalette } from "@/lib/color";
 import { getLogo } from "@/lib/tmdb";
 
 export const revalidate = 300;
@@ -22,6 +23,8 @@ const safe = <T,>(p: Promise<T>, fallback: T) => p.catch(() => fallback);
 
 async function toSlide(m: Media): Promise<HeroSlide> {
   const logo = await getLogo([m.title.english, m.title.romaji], releaseYear(m), m.format);
+  const palette = heroPalette(m.coverImage.color);
+  const aired = airedEpisodes(m);
   return {
     id: m.id,
     title: displayTitle(m),
@@ -29,12 +32,13 @@ async function toSlide(m: Media): Promise<HeroSlide> {
     banner: m.bannerImage,
     cover: m.coverImage.extraLarge ?? m.coverImage.large ?? "",
     format: formatLabel(m.format),
-    cc: airedEpisodes(m),
+    cc: aired,
     score: m.averageScore,
-    current: m.nextAiringEpisode ? m.nextAiringEpisode.episode : (m.episodes ?? 1),
+    current: aired || 1,
     total: m.episodes,
     airing: m.status === "RELEASING",
-    color: m.coverImage.color,
+    titleColor: palette.title,
+    tint: palette.tint,
   };
 }
 
@@ -51,17 +55,22 @@ export default async function Home() {
   const slides = await Promise.all(heroMedia.map(toSlide));
 
   return (
-    <div className="space-y-6 pb-4">
+    <div className="pb-2">
       <HeroCarousel slides={slides} />
-      <GenreRow />
-      <BookmarkCard />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
-        <div className="min-w-0 space-y-10">
+      <div className="mt-[22px]">
+        <GenreRow />
+      </div>
+      <div className="mt-5">
+        <BookmarkCard />
+      </div>
+
+      <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
+        <div className="min-w-0 space-y-7">
           <HomeFeed initial={newest} />
           <AiringSchedule />
         </div>
-        <aside className="space-y-6">
+        <aside className="space-y-5">
           <SideList title="Top Airing" kind="airing" media={airing.media} />
           <SideList title="Upcoming" kind="upcoming" media={upcoming.media} />
         </aside>

@@ -8,6 +8,7 @@ import { CCIcon, StatusDot } from "@/components/anime-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { airedEpisodes, displayTitle, formatLabel, getAnime, releaseYear, type Media } from "@/lib/anilist";
+import { heroPalette } from "@/lib/color";
 import { getLogo } from "@/lib/tmdb";
 import { stripHtml } from "@/lib/utils";
 
@@ -91,7 +92,12 @@ export default async function AnimePage({ params }: { params: Params }) {
                 />
               </>
             ) : (
-              <h1 className="text-balance text-3xl font-extrabold leading-tight text-gold md:text-5xl">{title}</h1>
+              <h1
+                className="text-balance text-2xl font-bold leading-tight md:text-5xl"
+                style={{ color: heroPalette(m.coverImage.color).title }}
+              >
+                {title}
+              </h1>
             )}
             {m.title.romaji && m.title.romaji !== title && (
               <p className="mt-2 text-muted-foreground">{m.title.romaji}</p>

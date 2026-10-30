@@ -6,12 +6,12 @@ export function Logo({ className }: { className?: string }) {
     <Link
       href="/"
       aria-label="Anibiar home"
-      className={cn("flex items-baseline gap-0.5 select-none", className)}
+      className={cn("flex shrink-0 select-none items-end gap-[2px]", className)}
     >
-      <span className="text-[1.55rem] font-extrabold uppercase sm:text-[1.75rem] leading-none tracking-tight text-foreground">
+      <span className="text-[25px] font-extrabold uppercase leading-none tracking-[-0.02em] text-foreground md:text-[28px]">
         Ani<span className="text-primary">biar</span>
       </span>
-      <span className="rounded-md bg-white/10 px-1 text-[9px] font-extrabold leading-4 text-foreground">
+      <span className="mb-[1px] rounded-[4px] bg-white/10 px-[3px] text-[8px] font-extrabold leading-[12px] text-foreground">
         TV
       </span>
     </Link>

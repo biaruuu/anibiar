@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Mic } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Chip } from "@/components/chip";
 import { airedEpisodes, displayTitle, formatLabel, releaseYear, type Media } from "@/lib/anilist";
 import { cn } from "@/lib/utils";
 
@@ -17,8 +17,8 @@ export function StatusDot({ status, className }: { status: string | null; classN
   return (
     <span
       className={cn(
-        "inline-block size-2.5 shrink-0 rounded-full",
-        status === "RELEASING" && "bg-live shadow-[0_0_8px_#b6f500aa]",
+        "inline-block size-2 shrink-0 rounded-full",
+        status === "RELEASING" && "bg-live shadow-[0_0_6px_#b6f50099]",
         status === "NOT_YET_RELEASED" && "bg-soon",
         status !== "RELEASING" && status !== "NOT_YET_RELEASED" && "bg-zinc-500",
         className,
@@ -26,9 +26,6 @@ export function StatusDot({ status, className }: { status: string | null; classN
     />
   );
 }
-
-// Compact on phones so TYPE / YEAR / EPISODES always fit under a 3-per-row card.
-const chip = "gap-0.5 px-1.5 py-[3px] text-[9.5px] sm:gap-1 sm:px-2.5 sm:py-1 sm:text-[11px]";
 
 export function AnimeCard({ media, priority = false }: { media: Media; priority?: boolean }) {
   const title = displayTitle(media);
@@ -38,7 +35,8 @@ export function AnimeCard({ media, priority = false }: { media: Media; priority?
 
   return (
     <Link href={`/anime/${media.id}`} className="group block min-w-0">
-      <div className="relative aspect-[2/3] overflow-hidden rounded-[1.1rem] bg-muted ring-1 ring-white/5 sm:rounded-[1.4rem]">
+      {/* Miruro poster ratio: 212 x 294 */}
+      <div className="relative aspect-[212/294] overflow-hidden rounded-[15px] bg-muted ring-1 ring-white/[0.06] md:rounded-[18px]">
         {cover && (
           <Image
             src={cover}
@@ -49,28 +47,27 @@ export function AnimeCard({ media, priority = false }: { media: Media; priority?
             className="object-cover transition duration-500 ease-out group-hover:scale-105"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
-      <div className="mt-2 flex items-center gap-1.5 px-0.5 sm:mt-3 sm:gap-2 sm:px-1">
-        <StatusDot status={media.status} className="size-2 sm:size-2.5" />
-        <h3 className="min-w-0 truncate text-[12px] font-bold leading-tight text-foreground transition-colors group-hover:text-primary sm:text-[15px]">
+      <div className="mt-[11px] flex items-center gap-[6px] px-[2px] md:gap-2">
+        <StatusDot status={media.status} />
+        <h3 className="min-w-0 truncate text-[13px] font-bold leading-4 text-foreground transition-colors group-hover:text-primary md:text-[15px]">
           {title}
         </h3>
       </div>
-      <div className="mt-1.5 flex gap-1 overflow-hidden px-0.5 sm:mt-2 sm:gap-1.5 sm:px-1">
-        <Badge className={chip}>{formatLabel(media.format)}</Badge>
-        {year && <Badge className={chip}>{year}</Badge>}
+      <div className="mt-[11px] flex gap-[5px] overflow-hidden px-[2px] md:gap-1.5">
+        <Chip size="card">{formatLabel(media.format)}</Chip>
+        {year && <Chip size="card">{year}</Chip>}
         {aired > 0 && (
-          <Badge className={chip}>
-            <CCIcon className="size-2.5 sm:size-3.5" />
+          <Chip size="card">
+            <CCIcon className="size-[10px] md:size-3.5" />
             {aired}
-          </Badge>
+          </Chip>
         )}
         {media.averageScore ? (
-          <Badge className={cn(chip, "hidden md:inline-flex")}>
+          <Chip size="card" className="hidden md:inline-flex">
             <Mic className="size-3" />
             {media.averageScore}
-          </Badge>
+          </Chip>
         ) : null}
       </div>
     </Link>

@@ -22,21 +22,10 @@
     @apply border-border;
   }
 
-  /* All rem-based sizes scale from here, so phones get a compact layout like Miruro's. */
   html {
     color-scheme: dark;
-    font-size: 13.5px;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-  }
-  @media (min-width: 400px) {
-    html { font-size: 14px; }
-  }
-  @media (min-width: 640px) {
-    html { font-size: 15px; }
-  }
-  @media (min-width: 1024px) {
-    html { font-size: 16px; }
   }
 
   body {

@@ -2,8 +2,9 @@ import { AnimeCard } from "@/components/anime-card";
 import type { Media } from "@/lib/anilist";
 import { cn } from "@/lib/utils";
 
+// 3 posters per row on phones (13px gutter like Miruro), more as the screen grows.
 export const gridClass =
-  "grid grid-cols-3 gap-x-2.5 gap-y-4 sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6";
+  "grid grid-cols-3 gap-x-[13px] gap-y-[14px] sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6";
 
 export function AnimeGrid({
   media,

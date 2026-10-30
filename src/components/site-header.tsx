@@ -14,15 +14,16 @@ const NAV = [
   { href: "/schedule", label: "Schedule", icon: CalendarDays },
 ];
 
+// 40px rounded squares on phones (Miruro), a little larger on desktop.
 const iconButton =
-  "grid size-10 shrink-0 place-items-center rounded-2xl sm:size-12 border border-border bg-card/70 text-foreground transition hover:bg-card hover:border-white/20";
+  "grid size-10 shrink-0 place-items-center rounded-[14px] border border-[#2d2d31] bg-[#141415]/90 text-foreground transition hover:border-white/20 hover:bg-card md:size-12 md:rounded-2xl";
 
 export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-transparent bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-[1500px] items-center gap-2.5 px-4 sm:h-[76px] sm:gap-3">
+    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-[60px] w-full max-w-[1500px] items-center gap-[13px] px-2 sm:px-4 md:h-[76px]">
         <Sheet>
           <SheetTrigger className={iconButton} aria-label="Open menu">
             <Menu className="size-5" />
@@ -69,12 +70,12 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-[9px] md:gap-3">
           <Link href="/search" className={iconButton} aria-label="Search">
             <Search className="size-5" />
           </Link>
           <Link href="/" className={iconButton} aria-label="Anibiar">
-            <LogoMark className="size-full bg-transparent text-lg" />
+            <LogoMark className="size-full bg-transparent text-[18px]" />
           </Link>
         </div>
       </div>
