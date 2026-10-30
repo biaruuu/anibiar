@@ -10,7 +10,7 @@ export function SiteFooter() {
           This website does not host or retain any media files. It only displays anime metadata
           provided by AniList and artwork provided by TMDB.
         </p>
-        <nav className="mt-6 flex flex-col gap-3 text-lg text-muted-foreground sm:flex-row sm:gap-8">
+        <nav className="mt-6 flex flex-col gap-3 text-base text-muted-foreground sm:flex-row sm:gap-8 sm:text-lg">
           <Link href="/search?sort=trending" className="transition hover:text-foreground">
             Trending
           </Link>

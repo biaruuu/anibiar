@@ -66,9 +66,13 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
   }, [day]);
 
   const rowsRef = useRef<HTMLDivElement>(null);
+  // Center the chosen day by scrolling ONLY the day strip. (scrollIntoView would
+  // also scroll the whole page down to the schedule when the site first loads.)
   useEffect(() => {
-    const el = rowsRef.current?.children[selected] as HTMLElement | undefined;
-    el?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    const c = rowsRef.current;
+    const el = c?.children[selected] as HTMLElement | undefined;
+    if (!c || !el) return;
+    c.scrollTo({ left: el.offsetLeft - c.clientWidth / 2 + el.clientWidth / 2, behavior: "smooth" });
   }, [selected, days.length]);
 
   const nowSec = Math.floor(Date.now() / 1000);
@@ -79,18 +83,18 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
 
   return (
     <section>
-      <p className="text-xl text-muted-foreground">Estimated</p>
-      <h2 className="text-4xl font-extrabold tracking-tight">Airing Schedule</h2>
+      <p className="text-base text-muted-foreground sm:text-xl">Estimated</p>
+      <h2 className="text-2xl font-extrabold tracking-tight sm:text-4xl">Airing Schedule</h2>
 
       <div
         ref={rowsRef}
-        className="no-scrollbar edge-fade-x mt-6 flex items-end gap-1 overflow-x-auto py-3"
+        className="no-scrollbar edge-fade-x relative mt-4 flex items-end overflow-x-auto py-2 sm:mt-6 sm:gap-1 sm:py-3"
       >
         {days.map((d, i) => {
           const active = i === selected;
           return (
             <div key={d.toISOString()} className="flex shrink-0 items-end">
-              <span className="px-3 text-3xl font-extrabold text-white/20">/</span>
+              <span className="px-2 text-2xl font-extrabold text-white/20 sm:px-3 sm:text-3xl">/</span>
               <button
                 onClick={() => setSelected(i)}
                 className={cn(
@@ -98,11 +102,16 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
                   active ? "text-foreground" : "text-white/35 hover:text-white/60",
                 )}
               >
-                <span className={cn("font-extrabold", active ? "text-5xl" : "text-4xl")}>
+                <span
+                  className={cn(
+                    "font-extrabold",
+                    active ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl",
+                  )}
+                >
                   {DAYS[d.getDay()]}
                 </span>
                 {active && (
-                  <span className="mt-1 text-xl text-muted-foreground">
+                  <span className="mt-1 text-base text-muted-foreground sm:text-xl">
                     {MONTHS[d.getMonth()]} {d.getDate()}
                   </span>
                 )}
@@ -139,17 +148,17 @@ export function AiringSchedule({ initialLimit = 10 }: { initialLimit?: number })
                     <Link
                       href={`/anime/${e.media.id}`}
                       className={cn(
-                        "relative flex items-center gap-4 px-5 py-3.5 transition hover:bg-white/5",
+                        "relative flex items-center gap-3 px-4 py-3 transition hover:bg-white/5 sm:gap-4 sm:px-5 sm:py-3.5",
                         aired && "before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-primary/70",
                       )}
                     >
-                      <span className="w-14 shrink-0 text-base text-muted-foreground">
+                      <span className="w-11 shrink-0 text-xs text-muted-foreground sm:w-14 sm:text-base">
                         {sameTime ? "" : time}
                       </span>
-                      <span className="min-w-0 flex-1 truncate text-lg">
+                      <span className="min-w-0 flex-1 truncate text-sm sm:text-lg">
                         {e.media.title.english ?? e.media.title.romaji}
                       </span>
-                      <span className="shrink-0 rounded-full border border-border px-3.5 py-1.5 text-base">
+                      <span className="shrink-0 rounded-full border border-border px-2.5 py-1 text-xs sm:px-3.5 sm:py-1.5 sm:text-base">
                         EP {e.episode}
                       </span>
                     </Link>

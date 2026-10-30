@@ -15,14 +15,14 @@ const NAV = [
 ];
 
 const iconButton =
-  "grid size-12 place-items-center rounded-2xl border border-border bg-card/70 text-foreground transition hover:bg-card hover:border-white/20";
+  "grid size-10 shrink-0 place-items-center rounded-2xl sm:size-12 border border-border bg-card/70 text-foreground transition hover:bg-card hover:border-white/20";
 
 export function SiteHeader() {
   const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 border-b border-transparent bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-[76px] w-full max-w-[1500px] items-center gap-3 px-4">
+      <div className="mx-auto flex h-16 w-full max-w-[1500px] items-center gap-2.5 px-4 sm:h-[76px] sm:gap-3">
         <Sheet>
           <SheetTrigger className={iconButton} aria-label="Open menu">
             <Menu className="size-5" />

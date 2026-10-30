@@ -69,13 +69,13 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
   return (
     <div ref={top} className="scroll-mt-24">
       <div className="mb-5 flex items-center gap-3">
-        <div className="no-scrollbar flex min-w-0 flex-1 overflow-x-auto rounded-2xl border border-border bg-card/60">
+        <div className="no-scrollbar flex min-w-0 flex-1 overflow-hidden rounded-2xl border border-border bg-card/60">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => changeTab(t.id)}
               className={cn(
-                "h-[3.25rem] flex-1 whitespace-nowrap px-5 text-lg font-bold transition-colors",
+                "h-11 flex-1 whitespace-nowrap px-2 text-sm font-bold transition-colors sm:h-[3.25rem] sm:text-lg",
                 tab === t.id
                   ? "bg-primary/20 text-primary"
                   : "text-foreground hover:bg-white/5",
@@ -85,21 +85,21 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
             </button>
           ))}
         </div>
-        <div className="flex h-[3.25rem] shrink-0 items-center overflow-hidden rounded-2xl border border-border bg-card/60">
+        <div className="flex h-11 shrink-0 items-center sm:h-[3.25rem] overflow-hidden rounded-2xl border border-border bg-card/60">
           <button
             aria-label="Previous page"
             disabled={page <= 1 || loading}
             onClick={() => changePage(page - 1)}
-            className="grid h-full w-11 place-items-center transition hover:bg-white/5 disabled:opacity-30"
+            className="grid h-full w-9 place-items-center transition sm:w-11 hover:bg-white/5 disabled:opacity-30"
           >
             <ChevronLeft className="size-5" />
           </button>
-          <span className="w-9 text-center text-lg text-muted-foreground">{page}</span>
+          <span className="w-8 text-center text-sm text-muted-foreground sm:w-9 sm:text-lg">{page}</span>
           <button
             aria-label="Next page"
             disabled={!data.hasNextPage || loading}
             onClick={() => changePage(page + 1)}
-            className="grid h-full w-11 place-items-center border-l border-border transition hover:bg-white/5 disabled:opacity-30"
+            className="grid h-full w-9 place-items-center border-l sm:w-11 border-border transition hover:bg-white/5 disabled:opacity-30"
           >
             <ChevronRight className="size-5" />
           </button>
@@ -117,7 +117,7 @@ export function HomeFeed({ initial }: { initial: ListResult }) {
           </button>
         </div>
       ) : loading ? (
-        <div className="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <div className="grid grid-cols-3 gap-x-2.5 gap-y-4 sm:grid-cols-4 sm:gap-x-4 sm:gap-y-5 md:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
           {Array.from({ length: 18 }).map((_, i) => (
             <div key={i}>
               <Skeleton className="aspect-[2/3] rounded-[1.4rem]" />

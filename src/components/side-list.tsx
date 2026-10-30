@@ -22,8 +22,8 @@ export function SideList({
   const shown = open ? media : media.slice(0, 5);
 
   return (
-    <section className="rounded-[2rem] border border-border p-4">
-      <h2 className="mb-4 flex items-center gap-2 px-2 pt-2 text-2xl font-extrabold uppercase tracking-tight">
+    <section className="rounded-[1.5rem] border border-border p-3 sm:rounded-[2rem] sm:p-4">
+      <h2 className="mb-3 flex items-center gap-2 px-2 pt-1 text-lg font-extrabold uppercase tracking-tight sm:mb-4 sm:pt-2 sm:text-2xl">
         {kind === "airing" ? <ChevronRight className="size-6" strokeWidth={3} /> : <Megaphone className="size-6" />}
         {title}
       </h2>
@@ -48,7 +48,7 @@ export function SideList({
                     style={{ maskImage: "linear-gradient(to right, transparent 30%, #000)" }}
                   />
                 )}
-                <div className="relative h-24 w-[4.25rem] shrink-0 overflow-hidden rounded-2xl sm:h-28 sm:w-20">
+                <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded-xl sm:h-28 sm:w-20 sm:rounded-2xl">
                   <Image
                     src={m.coverImage.large ?? m.coverImage.extraLarge ?? ""}
                     alt={t}
@@ -60,7 +60,7 @@ export function SideList({
                 <div className="relative min-w-0 flex-1 py-3">
                   <div className="flex items-start gap-3">
                     <StatusDot status={m.status} className="mt-2.5" />
-                    <h3 className="line-clamp-2 text-lg leading-snug transition-colors group-hover:text-primary">
+                    <h3 className="line-clamp-2 text-[14px] leading-snug transition-colors group-hover:text-primary sm:text-lg">
                       {t}
                     </h3>
                   </div>

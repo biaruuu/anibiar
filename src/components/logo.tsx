@@ -8,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
       aria-label="Anibiar home"
       className={cn("flex items-baseline gap-0.5 select-none", className)}
     >
-      <span className="text-[1.75rem] font-extrabold uppercase leading-none tracking-tight text-foreground">
+      <span className="text-[1.55rem] font-extrabold uppercase sm:text-[1.75rem] leading-none tracking-tight text-foreground">
         Ani<span className="text-primary">biar</span>
       </span>
       <span className="rounded-md bg-white/10 px-1 text-[9px] font-extrabold leading-4 text-foreground">

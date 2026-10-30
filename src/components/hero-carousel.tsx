@@ -38,7 +38,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   return (
     <section
-      className="relative h-[560px] overflow-hidden rounded-[2rem] border border-white/5 bg-card md:h-[520px] lg:h-[600px]"
+      className="relative aspect-[6/7] overflow-hidden rounded-[1.5rem] border border-white/5 bg-card sm:aspect-[4/3] md:aspect-auto md:h-[520px] md:rounded-[2rem] lg:h-[600px]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={() => setPaused(true)}
@@ -78,14 +78,14 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             {/* top pills */}
             <div className="absolute inset-x-4 top-4 flex items-start justify-between gap-3 md:inset-x-8 md:top-8">
               <span
-                className="flex items-center gap-2.5 rounded-full border border-white/10 px-4 py-2.5 text-lg font-extrabold shadow-lg backdrop-blur-md md:text-xl"
+                className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-sm font-extrabold shadow-lg backdrop-blur-md md:gap-2.5 md:px-4 md:py-2.5 md:text-xl"
                 style={{ background: `linear-gradient(135deg, ${tint}cc, rgba(0,0,0,0.55))` }}
               >
-                <Clock className="size-5" />
+                <Clock className="size-4 md:size-5" />
                 {s.airing ? `EP ${s.current} Airing Now` : "Featured"}
               </span>
               <span
-                className="rounded-full border border-white/10 px-5 py-2.5 text-xl font-extrabold shadow-lg backdrop-blur-md"
+                className="rounded-full border border-white/10 px-3.5 py-1.5 text-base font-extrabold shadow-lg backdrop-blur-md md:px-5 md:py-2.5 md:text-xl"
                 style={{ background: `linear-gradient(135deg, ${tint}cc, rgba(0,0,0,0.55))` }}
               >
                 {s.current} <span className="text-base text-white/70">/</span>{" "}
@@ -94,20 +94,20 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             </div>
 
             {/* bottom content */}
-            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-4 px-4 pb-10 text-center md:items-start md:px-10 md:pb-14 md:text-left">
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2.5 px-3 pb-8 text-center sm:gap-3 sm:px-4 md:items-start md:gap-4 md:px-10 md:pb-14 md:text-left">
               <div className="flex items-center gap-2">
-                <Badge variant="glass" className="px-3.5 py-2 text-sm">
+                <Badge variant="glass" className="px-2.5 py-1.5 text-xs md:px-3.5 md:py-2 md:text-sm">
                   {s.format}
                 </Badge>
                 {s.cc > 0 && (
-                  <Badge variant="glass" className="px-3.5 py-2 text-sm">
-                    <CCIcon className="size-4" />
+                  <Badge variant="glass" className="px-2.5 py-1.5 text-xs md:px-3.5 md:py-2 md:text-sm">
+                    <CCIcon className="size-3.5 md:size-4" />
                     {s.cc}
                   </Badge>
                 )}
                 {s.score ? (
-                  <Badge variant="glass" className="px-3.5 py-2 text-sm">
-                    <Star className="size-4" />
+                  <Badge variant="glass" className="px-2.5 py-1.5 text-xs md:px-3.5 md:py-2 md:text-sm">
+                    <Star className="size-3.5 md:size-4" />
                     {s.score}
                   </Badge>
                 ) : null}
@@ -122,23 +122,23 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                     width={500}
                     height={200}
                     unoptimized
-                    className="max-h-28 w-auto max-w-[78%] object-contain drop-shadow-[0_4px_18px_rgba(0,0,0,0.7)] md:max-h-36"
+                    className="max-h-16 w-auto max-w-[70%] object-contain drop-shadow-[0_4px_18px_rgba(0,0,0,0.7)] sm:max-h-24 md:max-h-36"
                   />
                 </>
               ) : (
-                <h2 className="max-w-3xl text-balance text-[2.1rem] font-extrabold leading-[1.1] text-gold drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] md:text-5xl">
+                <h2 className="line-clamp-3 max-w-3xl text-balance text-[1.35rem] font-extrabold leading-[1.15] text-gold drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] sm:text-3xl md:text-5xl">
                   {s.title}
                 </h2>
               )}
 
               <div className="mt-1 grid w-full max-w-xl grid-cols-2 gap-3 md:max-w-md">
-                <Button asChild variant="outline" size="lg" className="text-sm md:text-base">
+                <Button asChild variant="outline" size="lg" className="h-10 px-3 text-xs sm:h-12 sm:text-sm md:text-base">
                   <Link href={`/anime/${s.id}`} tabIndex={active ? 0 : -1}>
                     <Info className="size-5" />
                     DETAILS
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="text-sm md:text-base">
+                <Button asChild variant="outline" size="lg" className="h-10 px-3 text-xs sm:h-12 sm:text-sm md:text-base">
                   <Link href={`/watch/${s.id}?ep=1`} tabIndex={active ? 0 : -1}>
                     <span className="grid size-7 place-items-center rounded-full bg-white text-black">
                       <Play className="size-3.5 fill-current" />

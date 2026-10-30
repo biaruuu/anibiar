@@ -27,6 +27,9 @@ export function StatusDot({ status, className }: { status: string | null; classN
   );
 }
 
+// Compact on phones so TYPE / YEAR / EPISODES always fit under a 3-per-row card.
+const chip = "gap-0.5 px-1.5 py-[3px] text-[9.5px] sm:gap-1 sm:px-2.5 sm:py-1 sm:text-[11px]";
+
 export function AnimeCard({ media, priority = false }: { media: Media; priority?: boolean }) {
   const title = displayTitle(media);
   const year = releaseYear(media);
@@ -35,7 +38,7 @@ export function AnimeCard({ media, priority = false }: { media: Media; priority?
 
   return (
     <Link href={`/anime/${media.id}`} className="group block min-w-0">
-      <div className="relative aspect-[2/3] overflow-hidden rounded-[1.4rem] bg-muted ring-1 ring-white/5">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-[1.1rem] bg-muted ring-1 ring-white/5 sm:rounded-[1.4rem]">
         {cover && (
           <Image
             src={cover}
@@ -48,23 +51,23 @@ export function AnimeCard({ media, priority = false }: { media: Media; priority?
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
-      <div className="mt-3 flex items-center gap-2 px-1">
-        <StatusDot status={media.status} />
-        <h3 className="truncate text-[15px] font-bold leading-tight text-foreground transition-colors group-hover:text-primary">
+      <div className="mt-2 flex items-center gap-1.5 px-0.5 sm:mt-3 sm:gap-2 sm:px-1">
+        <StatusDot status={media.status} className="size-2 sm:size-2.5" />
+        <h3 className="min-w-0 truncate text-[12px] font-bold leading-tight text-foreground transition-colors group-hover:text-primary sm:text-[15px]">
           {title}
         </h3>
       </div>
-      <div className="mt-2 flex gap-1.5 overflow-hidden px-1">
-        <Badge>{formatLabel(media.format)}</Badge>
-        {year && <Badge>{year}</Badge>}
+      <div className="mt-1.5 flex gap-1 overflow-hidden px-0.5 sm:mt-2 sm:gap-1.5 sm:px-1">
+        <Badge className={chip}>{formatLabel(media.format)}</Badge>
+        {year && <Badge className={chip}>{year}</Badge>}
         {aired > 0 && (
-          <Badge>
-            <CCIcon />
+          <Badge className={chip}>
+            <CCIcon className="size-2.5 sm:size-3.5" />
             {aired}
           </Badge>
         )}
         {media.averageScore ? (
-          <Badge className="hidden sm:inline-flex">
+          <Badge className={cn(chip, "hidden md:inline-flex")}>
             <Mic className="size-3" />
             {media.averageScore}
           </Badge>
