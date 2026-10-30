@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Onyx / Miruro palette */
+    --background: 0 0% 4%;
+    --foreground: 240 5% 94%;
+    --card: 0 0% 8%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 255 5% 62%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 240 5% 94%;
+    --border: 0 0% 17%;
+    --primary: 257 100% 83%; /* #baa7ff */
+    --primary-foreground: 270 5% 7%;
+    --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .edge-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 36px, #000 calc(100% - 36px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 36px, #000 calc(100% - 36px), transparent 100%);
+  }
+}
